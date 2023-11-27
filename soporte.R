@@ -196,3 +196,30 @@ freelo23 <- freelo23 %>%
 # Convertir las columnas tipo lista
 freelo23 <- freelo23 %>%
   mutate(anios_freelance = as.numeric(unlist(anios_freelance)))
+
+freelo23$motivo[[29]] <- "No es por motivación. Usualmente el vinculo laboral para posiciones de consultoría en Uruguay son de 'independencia'."
+freelo23$motivo[[24]] <- as.character(freelo23$motivo[[24]])
+
+
+freelo23 <- unnest(data = freelo23, cols = motivo, keep_empty = TRUE)
+
+# Corregir coeficientes de recruiters
+freelo23$coeficiente[[8]] <- as.numeric(freelo23$coeficiente[[8]])
+freelo23$coeficiente[[12]] <- as.numeric(freelo23$coeficiente[[12]])
+freelo23$coeficiente[[14]] <- as.numeric(freelo23$coeficiente[[14]])
+freelo23$coeficiente[[15]] <- as.numeric(freelo23$coeficiente[[15]])
+freelo23$coeficiente[[16]] <- as.numeric(freelo23$coeficiente[[16]])
+freelo23$coeficiente[[19]] <- as.numeric(freelo23$coeficiente[[19]])
+
+freelo23 <- unnest(data = freelo23, cols = coeficiente, keep_empty = TRUE)
+
+# Corregir valor hora de freelos
+freelo23$valor_hora[[18]] <- NA
+
+freelo23 <- unnest(data = freelo23, cols = valor_hora, keep_empty = TRUE)
+
+# Guardar los datos en un archivo
+write_delim(freelo23, file = "data/freelancers_2023.csv", delim = ";")
+
+# Guardar datos originales 
+write_delim(kiwi23, file = "data/kiwi_2023.csv", delim = ";")
